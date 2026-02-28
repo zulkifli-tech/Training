@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Apex Training · Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+:root{
+  --bg:#f5f3ff;
+  --bg2:#ede9fe;
+  --card:#ffffff;
+  --card2:#f9f7ff;
+  --border:#d4c8f8;
+  --purple:#6d28d9;
+  --purple2:#7c3aed;
+  --purple3:#8b5cf6;
+  --purple-light:#ede9fe;
+  --indigo:#4338ca;
+  --violet:#7c3aed;
+  --pink:#db2777;
+  --green:#059669;
+  --green-light:#ecfdf5;
+  --red:#dc2626;
+  --red-light:#fef2f2;
+  --orange:#d97706;
+  --orange-light:#fffbeb;
+  --blue:#1d4ed8;
+  --blue-light:#eff6ff;
+  --gold:#b45309;
+  --text:#1e1b4b;
+  --text2:#4c1d95;
+  --muted:#7c6fa0;
+  --muted2:#a89cc8;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 10% 0%, rgba(109,40,217,0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 90% 85%, rgba(219,39,119,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(255,255,255,0.7) 0%, transparent 60%);
+  pointer-events:none;z-index:0;
+}
+
+body::after{
+  content:'';
+  position:fixed;inset:0;
+  background-image:radial-gradient(rgba(109,40,217,0.05) 1px, transparent 1px);
+  background-size:24px 24px;
+  pointer-events:none;z-index:0;
+}
+
+.wrap{
+  position:relative;z-index:1;
+  padding:16px;
+  max-width:480px;
+  margin:0 auto;
+}
+
+/* HEADER */
+.header{
+  background:linear-gradient(145deg,#6d28d9,#3730a3);
+  border-radius:22px;padding:18px;
+  margin-bottom:16px;
+  position:relative;overflow:hidden;
+  box-shadow:0 10px 40px rgba(109,40,217,0.35);
+}
+.header::before{
+  content:'';
+  position:absolute;top:-40px;right:-30px;
+  width:140px;height:140px;border-radius:50%;
+  background:rgba(255,255,255,0.06);
+}
+.header::after{
+  content:'';
+  position:absolute;bottom:-50px;left:10px;
+  width:100px;height:100px;border-radius:50%;
+  background:rgba(219,39,119,0.08);
+}
+
+.header-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
+.logo-row{display:flex;align-items:center;gap:12px;}
+.logo-box{
+  width:46px;height:46px;border-radius:14px;
+  background:rgba(255,255,255,0.18);
+  border:1px solid rgba(255,255,255,0.28);
+  display:flex;align-items:center;justify-content:center;font-size:24px;
+  flex-shrink:0;
+}
+.brand-name{
+  font-family:'Syne',sans-serif;
+  font-size:18px;font-weight:800;color:#fff;line-height:1.2;
+}
+.brand-sub{font-size:9px;color:rgba(255,255,255,0.55);letter-spacing:0.2em;text-transform:uppercase;margin-top:3px;}
+.live-badge{
+  display:flex;align-items:center;gap:5px;
+  background:rgba(255,255,255,0.14);
+  border:1px solid rgba(255,255,255,0.25);
+  border-radius:20px;padding:5px 11px;
+  font-size:9px;color:#fff;
+  font-family:'JetBrains Mono',monospace;
+  flex-shrink:0;
+}
+.live-dot{width:5px;height:5px;background:#a7f3d0;border-radius:50%;animation:blink 1.2s ease infinite;}
+
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);margin:12px 0;}
+
+.header-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.hstat{
+  background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.18);
+  border-radius:12px;padding:10px;text-align:center;
+}
+.hstat-val{font-size:14px;font-weight:800;color:#fff;line-height:1;}
+.hstat-lbl{font-size:8px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:0.1em;margin-top:2px;font-family:'JetBrains Mono',monospace;}
+
+/* DATE STRIP */
+.date-strip{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:10px 14px;
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:16px;
+  box-shadow:0 2px 8px rgba(109,40,217,0.07);
+}
+.date-lbl{font-size:10px;color:var(--muted);}
+.date-val{font-size:11px;color:var(--purple);font-weight:700;font-family:'JetBrains Mono',monospace;}
+
+/* SECTION */
+.section-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:8px;letter-spacing:0.25em;text-transform:uppercase;
+  color:var(--purple2);margin-bottom:10px;margin-top:20px;
+  display:flex;align-items:center;gap:8px;font-weight:600;
+}
+.section-label::before{content:'▸';color:var(--purple3);}
+.section-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.kpi{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:14px;
+  position:relative;overflow:hidden;
+  animation:fadeUp 0.4s ease both;
+  box-shadow:0 2px 12px rgba(109,40,217,0.08);
+}
+.kpi-stripe{position:absolute;top:0;left:0;right:0;height:3px;border-radius:3px 3px 0 0;}
+.kpi-icon-wrap{
+  width:36px;height:36px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;margin-bottom:10px;
+}
+.kpi-val{font-size:21px;font-weight:800;line-height:1;margin-bottom:2px;}
+.kpi-lbl{font-size:10px;color:var(--muted);line-height:1.3;}
+.kpi-badge{display:inline-block;font-size:9px;padding:2px 8px;border-radius:6px;font-weight:700;margin-top:5px;font-family:'JetBrains Mono',monospace;}
+.up{background:#ecfdf5;color:#059669;}
+.dn{background:#fef2f2;color:#dc2626;}
+.warn{background:#fffbeb;color:#d97706;}
+.neu{background:var(--purple-light);color:var(--purple);}
+
+/* CARD */
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:16px;
+  animation:fadeUp 0.4s ease both;
+  margin-bottom:10px;
+  box-shadow:0 2px 12px rgba(109,40,217,0.06);
+  position:relative;overflow:hidden;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(109,40,217,0.25),transparent);
+}
+.card-title{
+  font-family:'Syne',sans-serif;
+  font-size:14px;font-weight:700;color:var(--text);
+  margin-bottom:2px;display:flex;align-items:center;gap:6px;
+}
+.card-sub{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:14px;}
+
+/* REVENUE ROW */
+.rev-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:9px 0;border-bottom:1px solid var(--bg2);
+}
+.rev-row:last-child{border-bottom:none;}
+.rev-left{display:flex;align-items:center;gap:8px;}
+.rev-icon{font-size:16px;}
+.rev-name{font-size:11px;color:var(--text);font-weight:500;}
+.rev-count{font-size:9px;color:var(--muted);}
+.rev-val{font-size:13px;font-weight:700;}
+.rev-pct{font-size:9px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+
+/* PROGRAM ITEMS */
+.prog-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 12px;border-radius:10px;margin-bottom:6px;
+  border:1px solid var(--border);
+}
+.prog-active{background:rgba(109,40,217,0.06);}
+.prog-done{background:#ecfdf5;}
+.prog-upcoming{background:#eff6ff;}
+.prog-cancel{background:#fef2f2;}
+.prog-left{display:flex;align-items:center;gap:8px;}
+.prog-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.prog-name{font-size:11px;font-weight:600;color:var(--text);}
+.prog-client{font-size:9px;color:var(--muted);font-family:'JetBrains Mono',monospace;}
+.prog-right{text-align:right;}
+.prog-val{font-size:12px;font-weight:700;}
+.prog-status{font-size:8px;padding:2px 7px;border-radius:6px;font-weight:700;margin-top:2px;display:inline-block;font-family:'JetBrains Mono',monospace;}
+.s-active{background:rgba(109,40,217,0.12);color:var(--purple);}
+.s-done{background:#ecfdf5;color:#059669;}
+.s-upcoming{background:#eff6ff;color:#1d4ed8;}
+.s-cancel{background:#fef2f2;color:#dc2626;}
+.s-full{background:#fffbeb;color:#d97706;}
+
+/* TARGET */
+.target-item{margin-bottom:13px;}
+.target-hd{display:flex;justify-content:space-between;margin-bottom:5px;}
+.target-name{font-size:11px;color:var(--text);font-weight:600;}
+.target-pct{font-size:12px;font-weight:800;font-family:'JetBrains Mono',monospace;}
+.target-bar-bg{height:7px;background:var(--bg2);border-radius:4px;overflow:hidden;}
+.target-bar-fill{height:100%;border-radius:4px;}
+.target-sub{display:flex;justify-content:space-between;font-size:9px;color:var(--muted);margin-top:3px;font-family:'JetBrains Mono',monospace;}
+
+/* PARTICIPANT */
+.part-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.part-stat{
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:12px;padding:12px;text-align:center;
+}
+.part-stat-val{font-size:22px;font-weight:800;line-height:1;margin-bottom:3px;}
+.part-stat-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;}
+
+/* ATTENDANCE CIRCLE */
+.circle-wrap{display:flex;flex-direction:column;align-items:center;margin-bottom:12px;}
+.circle{
+  width:90px;height:90px;border-radius:50%;
+  background:conic-gradient(var(--purple) 0% 88%, var(--bg2) 88% 100%);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:6px;
+}
+.circle-inner{
+  width:65px;height:65px;border-radius:50%;
+  background:var(--card);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.circle-val{font-size:18px;font-weight:800;color:var(--purple);line-height:1;}
+.circle-lbl{font-size:8px;color:var(--muted);}
+
+/* CLIENT */
+.client-item{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 12px;border-radius:10px;margin-bottom:6px;
+  background:var(--card2);border:1px solid var(--border);
+}
+.cl-left{display:flex;align-items:center;gap:8px;}
+.cl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.cl-name{font-size:11px;font-weight:600;color:var(--text);}
+.cl-type{font-size:9px;color:var(--muted);}
+.cl-right{text-align:right;}
+.cl-val{font-size:12px;font-weight:700;}
+.cl-status{font-size:8px;padding:2px 7px;border-radius:6px;font-weight:700;margin-top:2px;display:inline-block;}
+.s-corp{background:rgba(109,40,217,0.12);color:var(--purple);}
+.s-gov{background:#eff6ff;color:#1d4ed8;}
+.s-new{background:#ecfdf5;color:#059669;}
+.s-repeat{background:#fffbeb;color:#d97706;}
+
+/* TRAINER */
+.trainer-item{
+  padding:12px;border-radius:12px;margin-bottom:8px;
+  background:var(--card2);border:1px solid var(--border);
+}
+.trainer-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.trainer-left{display:flex;align-items:center;gap:8px;}
+.trainer-avatar{
+  width:34px;height:34px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+  background:var(--purple-light);border:1px solid var(--border);
+}
+.trainer-name{font-size:12px;font-weight:700;color:var(--text);}
+.trainer-title{font-size:9px;color:var(--muted);}
+.trainer-rev{font-size:14px;font-weight:800;color:var(--purple);}
+.trainer-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;}
+.trainer-stat{background:var(--bg);border-radius:8px;padding:6px;text-align:center;}
+.trainer-stat-val{font-size:12px;font-weight:700;color:var(--text);}
+.trainer-stat-lbl{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;}
+.rating-stars{color:#f59e0b;font-size:10px;}
+
+/* HBAR */
+.hbar-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.hbar-lbl{font-size:11px;color:var(--text);width:100px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hbar-bg{flex:1;height:7px;background:var(--bg2);border-radius:4px;overflow:hidden;}
+.hbar-fill{height:100%;border-radius:4px;}
+.hbar-val{font-size:11px;color:var(--muted);width:42px;text-align:right;flex-shrink:0;font-family:'JetBrains Mono',monospace;}
+
+/* OUTSTANDING */
+.outstanding{
+  margin-top:12px;padding:12px 14px;
+  background:#fef2f2;border:1px solid #fecaca;
+  border-radius:12px;display:flex;justify-content:space-between;align-items:center;
+}
+
+/* ALERT */
+.alert-card{
+  border-radius:12px;padding:12px 14px;
+  display:flex;align-items:flex-start;gap:10px;
+  margin-bottom:8px;border-left:3px solid transparent;
+}
+.alert-crit{background:#fef2f2;border-color:#dc2626;}
+.alert-warn{background:#fffbeb;border-color:#d97706;}
+.alert-ok{background:#ecfdf5;border-color:#059669;}
+.alert-info{background:#eff6ff;border-color:#1d4ed8;}
+.alert-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+.alert-title{font-size:12px;font-weight:700;margin-bottom:3px;}
+.alert-desc{font-size:10px;line-height:1.5;}
+
+/* UPCOMING */
+.upcoming-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 0;border-bottom:1px solid var(--bg2);
+}
+.upcoming-item:last-child{border-bottom:none;}
+.upcoming-date{
+  background:var(--purple-light);border:1px solid var(--border);
+  border-radius:10px;padding:6px 8px;text-align:center;flex-shrink:0;min-width:44px;
+}
+.upcoming-day{font-size:16px;font-weight:800;color:var(--purple);line-height:1;}
+.upcoming-month{font-size:8px;color:var(--muted);text-transform:uppercase;font-family:'JetBrains Mono',monospace;}
+.upcoming-info{flex:1;}
+.upcoming-name{font-size:11px;font-weight:600;color:var(--text);}
+.upcoming-client{font-size:9px;color:var(--muted);}
+.upcoming-right{text-align:right;flex-shrink:0;}
+.upcoming-pax{font-size:12px;font-weight:700;color:var(--purple);}
+.upcoming-fee{font-size:9px;color:var(--muted);}
+
+/* SUMMARY */
+.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.sum-item{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:12px;
+  display:flex;align-items:center;gap:10px;
+  box-shadow:0 2px 8px rgba(109,40,217,0.06);
+}
+.sum-icon{font-size:20px;flex-shrink:0;}
+.sum-val{font-size:16px;font-weight:800;color:var(--text);line-height:1;}
+.sum-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin-top:1px;line-height:1.3;}
+
+/* TAB BAR */
+.tab-bar{
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(245,243,255,0.97);
+  backdrop-filter:blur(16px);
+  border-top:1px solid var(--border);
+  display:flex;justify-content:space-around;align-items:center;
+  padding:8px 0 14px;z-index:100;
+  box-shadow:0 -4px 20px rgba(109,40,217,0.1);
+}
+.tab-item{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  font-size:9px;color:var(--muted);cursor:pointer;padding:4px 10px;
+  font-family:'JetBrains Mono',monospace;
+}
+.tab-item.active{color:var(--purple);}
+.tab-icon{font-size:18px;}
+.bottom-space{height:72px;}
+
+.footer{
+  text-align:center;margin-top:16px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:8px;color:var(--muted2);
+  letter-spacing:0.2em;text-transform:uppercase;
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+@media(min-width:600px){
+  .wrap{max-width:1000px;}
+  .kpi-grid{grid-template-columns:repeat(4,1fr);}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .two-col .card{margin-bottom:0;}
+  .sum-grid{grid-template-columns:repeat(4,1fr);}
+  .tab-bar{display:none;}
+  .bottom-space{height:0;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-top">
+      <div class="logo-row">
+        <div class="logo-box">🎓</div>
+        <div>
+          <div class="brand-name">Apex Training & Co.</div>
+          <div class="brand-sub">Corporate Training Dashboard</div>
+        </div>
+      </div>
+      <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+    </div>
+    <div class="divider"></div>
+    <div class="header-stats">
+      <div class="hstat">
+        <div class="hstat-val">RM312K</div>
+        <div class="hstat-lbl">Revenue</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-val">1,840</div>
+        <div class="hstat-lbl">Participants</div>
+      </div>
+      <div class="hstat">
+        <div class="hstat-val">28</div>
+        <div class="hstat-lbl">Programs</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DATE -->
+  <div class="date-strip">
+    <span class="date-lbl">📅 Reporting Period</span>
+    <span class="date-val">February 2026</span>
+  </div>
+
+  <!-- 1. KPI -->
+  <div class="section-label">01 · Revenue Overview</div>
+  <div class="kpi-grid">
+    <div class="kpi" style="animation-delay:0.05s;">
+      <div class="kpi-stripe" style="background:linear-gradient(90deg,#6d28d9,#8b5cf6);"></div>
+      <div class="kpi-icon-wrap" style="background:var(--purple-light);">💰</div>
+      <div class="kpi-val" style="color:var(--purple);">RM312K</div>
+      <div class="kpi-lbl">Fees Collected</div>
+      <span class="kpi-badge up">▲ 18.4%</span>
+    </div>
+    <div class="kpi" style="animation-delay:0.1s;">
+      <div class="kpi-stripe" style="background:linear-gradient(90deg,#dc2626,#f87171);"></div>
+      <div class="kpi-icon-wrap" style="background:#fef2f2;">📄</div>
+      <div class="kpi-val" style="color:#dc2626;">RM48K</div>
+      <div class="kpi-lbl">Outstanding Payment</div>
+      <span class="kpi-badge dn">Follow Up!</span>
+    </div>
+    <div class="kpi" style="animation-delay:0.15s;">
+      <div class="kpi-stripe" style="background:linear-gradient(90deg,#059669,#34d399);"></div>
+      <div class="kpi-icon-wrap" style="background:#ecfdf5;">🎓</div>
+      <div class="kpi-val" style="color:#059669;">1,840</div>
+      <div class="kpi-lbl">Total Participants</div>
+      <span class="kpi-badge up">▲ 14.2%</span>
+    </div>
+    <div class="kpi" style="animation-delay:0.2s;">
+      <div class="kpi-stripe" style="background:linear-gradient(90deg,#1d4ed8,#60a5fa);"></div>
+      <div class="kpi-icon-wrap" style="background:#eff6ff;">📋</div>
+      <div class="kpi-val" style="color:#1d4ed8;">28</div>
+      <div class="kpi-lbl">Programs This Month</div>
+      <span class="kpi-badge neu">+5 New</span>
+    </div>
+  </div>
+
+  <!-- 2. REVENUE + TARGET -->
+  <div class="section-label">02 · Revenue & Target</div>
+  <div class="two-col">
+
+    <!-- Revenue by type -->
+    <div class="card">
+      <div class="card-title">💼 Revenue by Program</div>
+      <div class="card-sub">Breakdown · Feb 2026</div>
+
+      <div class="rev-row">
+        <div class="rev-left">
+          <div class="rev-icon">🧠</div>
+          <div>
+            <div class="rev-name">Leadership & Mgmt</div>
+            <div class="rev-count">8 programs</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="rev-val" style="color:var(--purple);">RM 98,400</div>
+          <div class="rev-pct">31.5%</div>
+        </div>
+      </div>
+
+      <div class="rev-row">
+        <div class="rev-left">
+          <div class="rev-icon">💬</div>
+          <div>
+            <div class="rev-name">Soft Skills</div>
+            <div class="rev-count">7 programs</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="rev-val" style="color:#1d4ed8;">RM 74,800</div>
+          <div class="rev-pct">24.0%</div>
+        </div>
+      </div>
+
+      <div class="rev-row">
+        <div class="rev-left">
+          <div class="rev-icon">⚙️</div>
+          <div>
+            <div class="rev-name">Technical Skills</div>
+            <div class="rev-count">6 programs</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="rev-val" style="color:#059669;">RM 68,400</div>
+          <div class="rev-pct">21.9%</div>
+        </div>
+      </div>
+
+      <div class="rev-row">
+        <div class="rev-left">
+          <div class="rev-icon">🦺</div>
+          <div>
+            <div class="rev-name">Safety & Compliance</div>
+            <div class="rev-count">5 programs</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="rev-val" style="color:#d97706;">RM 42,200</div>
+          <div class="rev-pct">13.5%</div>
+        </div>
+      </div>
+
+      <div class="rev-row">
+        <div class="rev-left">
+          <div class="rev-icon">💻</div>
+          <div>
+            <div class="rev-name">Digital & IT</div>
+            <div class="rev-count">2 programs</div>
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div class="rev-val" style="color:#db2777;">RM 28,200</div>
+          <div class="rev-pct">9.0%</div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px;padding:10px 12px;background:var(--purple-light);border:1px solid var(--border);border-radius:10px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:9px;color:var(--purple);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.1em;">Total Revenue</span>
+        <span style="font-size:18px;font-weight:800;color:var(--purple);">RM 312,000</span>
+      </div>
+    </div>
+
+    <!-- Target vs Actual -->
+    <div class="card">
+      <div class="card-title">🎯 Target vs Actual</div>
+      <div class="card-sub">Monthly Achievement</div>
+
+      <div class="target-item">
+        <div class="target-hd">
+          <span class="target-name">Revenue</span>
+          <span class="target-pct" style="color:#059669;">104%</span>
+        </div>
+        <div class="target-bar-bg"><div class="target-bar-fill" style="width:100%;background:linear-gradient(90deg,#6d28d9,#8b5cf6);"></div></div>
+        <div class="target-sub"><span>RM312K</span><span>Target: RM300K</span></div>
+      </div>
+
+      <div class="target-item">
+        <div class="target-hd">
+          <span class="target-name">Programs Delivered</span>
+          <span class="target-pct" style="color:#059669;">112%</span>
+        </div>
+        <div class="target-bar-bg"><div class="target-bar-fill" style="width:100%;background:linear-gradient(90deg,#059669,#34d399);"></div></div>
+        <div class="target-sub"><span>28 programs</span><span>Target: 25</span></div>
+      </div>
+
+      <div class="target-item">
+        <div class="target-hd">
+          <span class="target-name">New Clients</span>
+          <span class="target-pct" style="color:#1d4ed8;">100%</span>
+        </div>
+        <div class="target-bar-bg"><div class="target-bar-fill" style="width:100%;background:linear-gradient(90deg,#1d4ed8,#60a5fa);"></div></div>
+        <div class="target-sub"><span>5 clients</span><span>Target: 5</span></div>
+      </div>
+
+      <div class="target-item">
+        <div class="target-hd">
+          <span class="target-name">Participant Hours</span>
+          <span class="target-pct" style="color:#d97706;">86%</span>
+        </div>
+        <div class="target-bar-bg"><div class="target-bar-fill" style="width:86%;background:linear-gradient(90deg,#d97706,#fbbf24);"></div></div>
+        <div class="target-sub"><span>4,600 hrs</span><span>Target: 5,000</span></div>
+      </div>
+
+      <div class="target-item">
+        <div class="target-hd">
+          <span class="target-name">Cert Issued</span>
+          <span class="target-pct" style="color:#059669;">96%</span>
+        </div>
+        <div class="target-bar-bg"><div class="target-bar-fill" style="width:96%;background:linear-gradient(90deg,#db2777,#f472b6);"></div></div>
+        <div class="target-sub"><span>1,764 certs</span><span>Target: 1,840</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. PROGRAM TRACKING -->
+  <div class="section-label">03 · Program Tracking</div>
+  <div class="card">
+    <div class="card-title">📋 Active & Recent Programs</div>
+    <div class="card-sub">Status · Feb 2026</div>
+
+    <!-- Stats -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
+      <div style="background:var(--purple-light);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
+        <div style="font-size:18px;font-weight:800;color:var(--purple);">28</div>
+        <div style="font-size:8px;color:var(--muted);">TOTAL</div>
+      </div>
+      <div style="background:#ecfdf5;border:1px solid #a7f3d0;border-radius:10px;padding:10px;text-align:center;">
+        <div style="font-size:18px;font-weight:800;color:#059669;">18</div>
+        <div style="font-size:8px;color:var(--muted);">DONE</div>
+      </div>
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:10px;text-align:center;">
+        <div style="font-size:18px;font-weight:800;color:#1d4ed8;">8</div>
+        <div style="font-size:8px;color:var(--muted);">ACTIVE</div>
+      </div>
+      <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:10px;text-align:center;">
+        <div style="font-size:18px;font-weight:800;color:#dc2626;">2</div>
+        <div style="font-size:8px;color:var(--muted);">CANCEL</div>
+      </div>
+    </div>
+
+    <div class="prog-item prog-active">
+      <div class="prog-left">
+        <div class="prog-dot" style="background:var(--purple);"></div>
+        <div>
+          <div class="prog-name">Leadership Excellence</div>
+          <div class="prog-client">Petronas · 45 pax</div>
+        </div>
+      </div>
+      <div class="prog-right">
+        <div class="prog-val" style="color:var(--purple);">RM 28,000</div>
+        <div class="prog-status s-active">IN PROGRESS</div>
+      </div>
+    </div>
+
+    <div class="prog-item prog-active">
+      <div class="prog-left">
+        <div class="prog-dot" style="background:#d97706;"></div>
+        <div>
+          <div class="prog-name">Safety @ Workplace</div>
+          <div class="prog-client">TNB · 80 pax · ALMOST FULL</div>
+        </div>
+      </div>
+      <div class="prog-right">
+        <div class="prog-val" style="color:#d97706;">RM 18,400</div>
+        <div class="prog-status s-full">⚡ ALMOST FULL</div>
+      </div>
+    </div>
+
+    <div class="prog-item prog-done">
+      <div class="prog-left">
+        <div class="prog-dot" style="background:#059669;"></div>
+        <div>
+          <div class="prog-name">Excel for Finance</div>
+          <div class="prog-client">Maybank · 32 pax</div>
+        </div>
+      </div>
+      <div class="prog-right">
+        <div class="prog-val" style="color:#059669;">RM 12,800</div>
+        <div class="prog-status s-done">✓ DONE</div>
+      </div>
+    </div>
+
+    <div class="prog-item prog-upcoming">
+      <div class="prog-left">
+        <div class="prog-dot" style="background:#1d4ed8;"></div>
+        <div>
+          <div class="prog-name">Communication Skills</div>
+          <div class="prog-client">Telekom · 60 pax · 8 Mac</div>
+        </div>
+      </div>
+      <div class="prog-right">
+        <div class="prog-val" style="color:#1d4ed8;">RM 22,000</div>
+        <div class="prog-status s-upcoming">UPCOMING</div>
+      </div>
+    </div>
+
+    <div class="prog-item prog-cancel">
+      <div class="prog-left">
+        <div class="prog-dot" style="background:#dc2626;"></div>
+        <div>
+          <div class="prog-name">Digital Marketing</div>
+          <div class="prog-client">Client postponed</div>
+        </div>
+      </div>
+      <div class="prog-right">
+        <div class="prog-val" style="color:#dc2626;">RM 14,000</div>
+        <div class="prog-status s-cancel">CANCELLED</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. PARTICIPANTS + UPCOMING -->
+  <div class="section-label">04 · Participants & Upcoming</div>
+  <div class="two-col">
+
+    <!-- Participant stats -->
+    <div class="card">
+      <div class="card-title">🎓 Participant Stats</div>
+      <div class="card-sub">Attendance & Completion</div>
+
+      <div class="part-stat-grid">
+        <div class="part-stat">
+          <div class="part-stat-val" style="color:var(--purple);">1,840</div>
+          <div class="part-stat-lbl">Total Pax</div>
+        </div>
+        <div class="part-stat">
+          <div class="part-stat-val" style="color:#059669;">1,764</div>
+          <div class="part-stat-lbl">Cert Issued</div>
+        </div>
+      </div>
+
+      <!-- Attendance circle -->
+      <div class="circle-wrap">
+        <div class="circle">
+          <div class="circle-inner">
+            <div class="circle-val">88%</div>
+            <div class="circle-lbl">ATTEND</div>
+          </div>
+        </div>
+        <div style="font-size:10px;color:var(--muted);text-align:center;">Attendance Rate</div>
+      </div>
+
+      <!-- Completion rate -->
+      <div style="margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+          <span style="font-size:11px;color:var(--text);font-weight:600;">Completion Rate</span>
+          <span style="font-size:12px;font-weight:800;color:#059669;">95.9%</span>
+        </div>
+        <div style="height:7px;background:var(--bg2);border-radius:4px;overflow:hidden;">
+          <div style="width:96%;height:100%;border-radius:4px;background:linear-gradient(90deg,#059669,#34d399);"></div>
+        </div>
+      </div>
+
+      <!-- Breakdown -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div style="background:#ecfdf5;border:1px solid #a7f3d0;border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:16px;font-weight:800;color:#059669;">1,764</div>
+          <div style="font-size:8px;color:var(--muted);">CERT ISSUED</div>
+        </div>
+        <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:16px;font-weight:800;color:#dc2626;">76</div>
+          <div style="font-size:8px;color:var(--muted);">NO CERT</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upcoming programs -->
+    <div class="card">
+      <div class="card-title">📅 Upcoming Programs</div>
+      <div class="card-sub">Mac — Apr 2026</div>
+
+      <div class="upcoming-item">
+        <div class="upcoming-date">
+          <div class="upcoming-day">08</div>
+          <div class="upcoming-month">Mac</div>
+        </div>
+        <div class="upcoming-info">
+          <div class="upcoming-name">Communication Skills</div>
+          <div class="upcoming-client">Telekom Malaysia</div>
+        </div>
+        <div class="upcoming-right">
+          <div class="upcoming-pax">60 pax</div>
+          <div class="upcoming-fee">RM22K</div>
+        </div>
+      </div>
+
+      <div class="upcoming-item">
+        <div class="upcoming-date">
+          <div class="upcoming-day">12</div>
+          <div class="upcoming-month">Mac</div>
+        </div>
+        <div class="upcoming-info">
+          <div class="upcoming-name">HR Management</div>
+          <div class="upcoming-client">CIMB Group</div>
+        </div>
+        <div class="upcoming-right">
+          <div class="upcoming-pax">40 pax</div>
+          <div class="upcoming-fee">RM18K</div>
+        </div>
+      </div>
+
+      <div class="upcoming-item">
+        <div class="upcoming-date">
+          <div class="upcoming-day">18</div>
+          <div class="upcoming-month">Mac</div>
+        </div>
+        <div class="upcoming-info">
+          <div class="upcoming-name">Finance for Non-Finance</div>
+          <div class="upcoming-client">Sime Darby</div>
+        </div>
+        <div class="upcoming-right">
+          <div class="upcoming-pax">35 pax</div>
+          <div class="upcoming-fee">RM14K</div>
+        </div>
+      </div>
+
+      <div class="upcoming-item">
+        <div class="upcoming-date">
+          <div class="upcoming-day">05</div>
+          <div class="upcoming-month">Apr</div>
+        </div>
+        <div class="upcoming-info">
+          <div class="upcoming-name">Safety Induction</div>
+          <div class="upcoming-client">Gamuda Bhd</div>
+        </div>
+        <div class="upcoming-right">
+          <div class="upcoming-pax">120 pax</div>
+          <div class="upcoming-fee">RM32K</div>
+        </div>
+      </div>
+
+      <div style="margin-top:10px;padding:10px 12px;background:var(--purple-light);border:1px solid var(--border);border-radius:10px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:9px;color:var(--purple);font-family:'JetBrains Mono',monospace;text-transform:uppercase;">Pipeline Value</span>
+        <span style="font-size:16px;font-weight:800;color:var(--purple);">RM 86,000</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. CLIENTS + TRAINERS -->
+  <div class="section-label">05 · Clients & Trainers</div>
+  <div class="two-col">
+
+    <!-- Clients -->
+    <div class="card">
+      <div class="card-title">🏢 Corporate Clients</div>
+      <div class="card-sub">Active · Feb 2026</div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+        <div style="background:var(--purple-light);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:20px;font-weight:800;color:var(--purple);">42</div>
+          <div style="font-size:8px;color:var(--muted);">TOTAL</div>
+        </div>
+        <div style="background:#ecfdf5;border:1px solid #a7f3d0;border-radius:10px;padding:10px;text-align:center;">
+          <div style="font-size:20px;font-weight:800;color:#059669;">5</div>
+          <div style="font-size:8px;color:var(--muted);">NEW</div>
+        </div>
+      </div>
+
+      <div class="client-item">
+        <div class="cl-left">
+          <div class="cl-dot" style="background:var(--purple);"></div>
+          <div>
+            <div class="cl-name">Petronas</div>
+            <div class="cl-type">Oil & Gas · 3 programs</div>
+          </div>
+        </div>
+        <div class="cl-right">
+          <div class="cl-val" style="color:var(--purple);">RM68K</div>
+          <div class="cl-status s-repeat">↻ Repeat</div>
+        </div>
+      </div>
+
+      <div class="client-item">
+        <div class="cl-left">
+          <div class="cl-dot" style="background:#1d4ed8;"></div>
+          <div>
+            <div class="cl-name">Telekom Malaysia</div>
+            <div class="cl-type">Telco · 2 programs</div>
+          </div>
+        </div>
+        <div class="cl-right">
+          <div class="cl-val" style="color:#1d4ed8;">RM42K</div>
+          <div class="cl-status s-corp">Corporate</div>
+        </div>
+      </div>
+
+      <div class="client-item">
+        <div class="cl-left">
+          <div class="cl-dot" style="background:#059669;"></div>
+          <div>
+            <div class="cl-name">Gamuda Bhd</div>
+            <div class="cl-type">Construction · New</div>
+          </div>
+        </div>
+        <div class="cl-right">
+          <div class="cl-val" style="color:#059669;">RM32K</div>
+          <div class="cl-status s-new">★ New</div>
+        </div>
+      </div>
+
+      <div class="client-item">
+        <div class="cl-left">
+          <div class="cl-dot" style="background:#d97706;"></div>
+          <div>
+            <div class="cl-name">Kementerian KDN</div>
+            <div class="cl-type">Government · 2 programs</div>
+          </div>
+        </div>
+        <div class="cl-right">
+          <div class="cl-val" style="color:#d97706;">RM28K</div>
+          <div class="cl-status s-gov">GOV</div>
+        </div>
+      </div>
+
+      <!-- Top program -->
+      <div style="margin-top:10px;">
+        <div style="font-size:9px;color:var(--muted);font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">Top Programs</div>
+        <div class="hbar-row">
+          <div class="hbar-lbl">Leadership</div>
+          <div class="hbar-bg"><div class="hbar-fill" style="width:90%;background:linear-gradient(90deg,#6d28d9,#8b5cf6);"></div></div>
+          <div class="hbar-val">8 runs</div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-lbl">Soft Skills</div>
+          <div class="hbar-bg"><div class="hbar-fill" style="width:72%;background:linear-gradient(90deg,#1d4ed8,#60a5fa);"></div></div>
+          <div class="hbar-val">7 runs</div>
+        </div>
+        <div class="hbar-row">
+          <div class="hbar-lbl">Safety</div>
+          <div class="hbar-bg"><div class="hbar-fill" style="width:55%;background:linear-gradient(90deg,#d97706,#fbbf24);"></div></div>
+          <div class="hbar-val">5 runs</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trainers -->
+    <div class="card">
+      <div class="card-title">👨‍🏫 Trainer Performance</div>
+      <div class="card-sub">Rating & Revenue · Feb 2026</div>
+
+      <div class="trainer-item">
+        <div class="trainer-top">
+          <div class="trainer-left">
+            <div class="trainer-avatar">👨‍💼</div>
+            <div>
+              <div class="trainer-name">Dr. Farouk Azman</div>
+              <div class="trainer-title">Leadership Specialist</div>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div class="trainer-rev">RM 98K</div>
+            <div class="rating-stars">★★★★★ 4.9</div>
+          </div>
+        </div>
+        <div class="trainer-stats">
+          <div class="trainer-stat">
+            <div class="trainer-stat-val" style="color:var(--purple);">8</div>
+            <div class="trainer-stat-lbl">Programs</div>
+          </div>
+          <div class="trainer-stat">
+            <div class="trainer-stat-val" style="color:#059669;">480</div>
+            <div class="trainer-stat-lbl">Pax</div>
+          </div>
+          <div class="trainer-stat">
+            <div class="trainer-stat-val" style="color:#1d4ed8;">128</div>
+            <div class="trainer-stat-lbl">Hours</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="trainer-item">
+        <div class="trainer-top">
+          <div class="trainer-left">
+            <div class="trainer-avatar">👩‍💼</div>
+            <div>
+              <div class="trainer-name">Puan Rozita Hamid</div>
+              <div class="trainer-title">Soft Skills Coach</div>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div class="trainer-rev">RM 74K</div>
+            <div class="rating-stars">★★★★★ 4.8</div>
+          </div>
+        </div>
+        <div class="trainer-stats">
+          <div class="trainer-stat">
+            <div class="trainer-stat-val" style="color:var(--purple);">7</div>
+            <div class="trainer-stat-lbl">Programs</div>
+          </div>
+          <div class="trainer-stat">
+            <div class="trainer-stat-val" style="color:#059669;">420</div>
+            <div class="trainer-stat-lbl">Pax</div>
+          </div>
+          <div class="trainer-stat">
+            <div class="trainer-stat-val" style="color:#1d4ed8;">112</div>
+            <div class="trainer-stat-lbl">Hours</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="trainer-item">
+        <div class="trainer-top">
+          <div class="trainer-left">
+            <div class="trainer-avatar">👨‍💻</div>
+            <div>
+              <div class="trainer-name">En. Hazwan Yusof</div>
+              <div class="trainer-title">Safety Trainer</div>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <div class="trainer-rev">RM 42K</div>
+            <div class="rating-stars">★★★★☆ 4.6</div>
+          </div>
+        </div>
+        <div class="trainer-stats">
+          <div class="trainer-stat">
+            <div class="trainer-stat-val" style="color:var(--purple);">5</div>
+            <div class="trainer-stat-lbl">Programs</div>
+          </div>
+          <div class="trainer-stat">
+            <div class="trainer-stat-val" style="color:#059669;">380</div>
+            <div class="trainer-stat-lbl">Pax</div>
+          </div>
+          <div class="trainer-stat">
+            <div class="trainer-stat-val" style="color:#1d4ed8;">80</div>
+            <div class="trainer-stat-lbl">Hours</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Outstanding -->
+      <div class="outstanding">
+        <div>
+          <div style="font-size:9px;color:#dc2626;text-transform:uppercase;letter-spacing:0.1em;font-weight:700;font-family:'JetBrains Mono',monospace;margin-bottom:3px;">⚠ Outstanding Payment</div>
+          <div style="font-size:10px;color:#b91c1c;">6 clients belum bayar</div>
+        </div>
+        <div style="font-size:24px;font-weight:800;color:#dc2626;">RM 48,000</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. ALERTS -->
+  <div class="section-label">06 · Priority Alerts</div>
+  <div class="alert-card alert-warn">
+    <div class="alert-icon">⚡</div>
+    <div>
+      <div class="alert-title" style="color:#d97706;">Safety @ Workplace — Almost Full!</div>
+      <div class="alert-desc" style="color:#92400e;">TNB program (80 pax) hampir penuh. Hanya tinggal 8 seat lagi. Hubungi client lain untuk slot tambahan sekarang!</div>
+    </div>
+  </div>
+  <div class="alert-card alert-crit">
+    <div class="alert-icon">💸</div>
+    <div>
+      <div class="alert-title" style="color:#dc2626;">Outstanding Payment RM48,000</div>
+      <div class="alert-desc" style="color:#991b1b;">6 clients belum settle payment. Hantar reminder invoice minggu ini sebelum program baru bermula.</div>
+    </div>
+  </div>
+  <div class="alert-card alert-info">
+    <div class="alert-icon">📅</div>
+    <div>
+      <div class="alert-title" style="color:#1d4ed8;">4 Programs Upcoming Next Month</div>
+      <div class="alert-desc" style="color:#1e40af;">Pipeline RM86K untuk Mac-Apr. Pastikan trainer, venue & material dah confirm untuk semua program.</div>
+    </div>
+  </div>
+  <div class="alert-card alert-ok">
+    <div class="alert-icon">✅</div>
+    <div>
+      <div class="alert-title" style="color:#059669;">Revenue & Programs Exceed Target!</div>
+      <div class="alert-desc" style="color:#065f46;">Revenue 104% & programs delivered 112% dari target. Participant rating average 4.77/5.0 — excellent!</div>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="section-label">07 · Summary</div>
+  <div class="sum-grid">
+    <div class="sum-item">
+      <div class="sum-icon">💰</div>
+      <div>
+        <div class="sum-val" style="color:var(--purple);">RM312K</div>
+        <div class="sum-lbl">Revenue</div>
+      </div>
+    </div>
+    <div class="sum-item">
+      <div class="sum-icon">🎓</div>
+      <div>
+        <div class="sum-val" style="color:#059669;">1,840</div>
+        <div class="sum-lbl">Participants</div>
+      </div>
+    </div>
+    <div class="sum-item">
+      <div class="sum-icon">📋</div>
+      <div>
+        <div class="sum-val" style="color:#1d4ed8;">28</div>
+        <div class="sum-lbl">Programs</div>
+      </div>
+    </div>
+    <div class="sum-item">
+      <div class="sum-icon">⭐</div>
+      <div>
+        <div class="sum-val" style="color:#d97706;">4.77</div>
+        <div class="sum-lbl">Avg Rating</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-space"></div>
+  <div class="footer">// Apex Training & Co. · Corporate Dashboard · Confidential · Feb 2026</div>
+</div>
+
+<!-- TAB BAR -->
+<div class="tab-bar">
+  <div class="tab-item active">
+    <div class="tab-icon">💰</div>
+    <div>Revenue</div>
+  </div>
+  <div class="tab-item">
+    <div class="tab-icon">📋</div>
+    <div>Programs</div>
+  </div>
+  <div class="tab-item">
+    <div class="tab-icon">🎓</div>
+    <div>Pax</div>
+  </div>
+  <div class="tab-item">
+    <div class="tab-icon">👨‍🏫</div>
+    <div>Trainers</div>
+  </div>
+</div>
+
+</body>
+</html>
